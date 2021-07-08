@@ -17,6 +17,12 @@ class Person
     end
 
     def die?
-        return @hitpoint <= 0
+        is_die = @hitpoint <= 0
+        puts "#{@name} dies" if is_die
+        return is_die
+    end
+
+    def to_s
+        return "#{@name} has #{@hitpoint} hitpoints and #{@attack_damage} attack damage"
     end
 end
