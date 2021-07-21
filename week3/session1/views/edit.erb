@@ -1,0 +1,19 @@
+<body>
+    <h1>Edit <%= item.name %></h1>
+
+    <form method="POST" action="/items/update/<%= item.id %>">
+        <input name="name" type="text" value="<%= item.name %>"/>
+        <input name="price" type="text" value="<%= item.price %>"/>
+        <select name="category" id="category" data-category="<%= item.category.id %>">
+        <% categories.each do |category|%>
+            <option value="<%= category.id %>"><%= category.name %></option>
+        <% end %>
+        </select>
+        <button type="submit">Update Item</button>
+    </form>
+<body>
+
+<script>
+    var category = document.getElementById("category");
+    category.value = category.dataset.category;
+</script>
