@@ -42,7 +42,7 @@ def get_all_categories
 end
 
 def get_all_items_with_categories
-    dbRaw = item_categories = $client.query("
+    dbRaw = $client.query("
         select items.*, categories.name as category_name, categories.id as category_id from items
         join item_categories on item_categories.item_id = items.id
         join categories on categories.id = item_categories.category_id

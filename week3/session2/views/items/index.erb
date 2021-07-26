@@ -1,0 +1,38 @@
+<style>
+    thead tr td {
+        font-weight: bold;
+    }
+
+    tbody tr td {
+        padding-right: 50px;
+    }
+</style>
+
+<h1>Item</h1>
+
+<table>
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Price</td>
+        </tr>
+    </thead>
+    <tbody>
+    <% items.each do | item | %>
+        <tr>
+            <td><%= item.name %></td>
+            <td><%= item.price %></td>
+            <td><a href="/items/<%=item.id%>">Show</a></td>
+            <td><a href="/items/edit/<%=item.id%>">Edit</a></td>
+            <td>
+                <form action="/items/delete/<%=item.id%>" method="POST">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+    <% end %>        
+    </tbody>
+</table>
+
+<a href="/items/new">New Item</a>
