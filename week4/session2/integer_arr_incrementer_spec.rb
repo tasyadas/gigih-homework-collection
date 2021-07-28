@@ -17,5 +17,13 @@ RSpec.describe IntegerArrIncrementer do
             actual_output = IntegerArrIncrementer.new.increment(input)
             expect(actual_output).to eq(expected_output)
         end
+
+        it 'should return [1, 0] when input is [9]' do
+            input = [9]
+            expected_output = [1, 0]
+
+            actual_output = IntegerArrIncrementer.new.increment(input)
+            expect(actual_output).to eq(expected_output)
+        end
     end
 end
