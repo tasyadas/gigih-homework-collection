@@ -8,7 +8,7 @@ describe Item do
             before(:each) do
                 params = {
                     'name' => 'Pasta',
-                    'price' => 
+                    'price' => 54000
                 }
             end
 

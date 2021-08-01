@@ -23,6 +23,8 @@ class ItemController
 
     def self.add_item(req)
         item = Item.new(req)
-        item.save
+        categories = req['categories']
+
+        item.save(categories)
     end
 end

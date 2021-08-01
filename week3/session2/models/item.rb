@@ -12,13 +12,26 @@ class Item
         @categories = []
     end
     
-    def save
+    def save(categories = [])
         return false unless valid?
 
-        item = @@client.query("insert into items(name, price) values('#{name}', '#{price}')")
-        puts item
-        puts '-------------'
-        # item_categories = 
+        # add new items
+        @@client.query("insert into items(name, price) values('#{name}', '#{price}')")
+
+        # create relationship to category
+        if categories.length() >= 1
+            categories.each do |category| 
+                @@client.query("
+                    INSERT INTO item_categories(item_id, category_id)
+                    VALUES(
+                        (select id AS item_id from items order by id desc limit 1),
+                        ('#{category.to_i}')
+                    )
+                ")
+            end
+        end
+
+        true
     end
 
     def add_category(params)
@@ -28,7 +41,7 @@ class Item
         })
 
         category.save
-        category
+        true
     end
 
     def valid?
