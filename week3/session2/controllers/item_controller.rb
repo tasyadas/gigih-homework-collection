@@ -23,8 +23,23 @@ class ItemController
 
     def self.add_item(req)
         item = Item.new(req)
-        categories = req['categories']
+        item.save
+    end
 
-        item.save(categories)
+    def self.edit_item(id)
+        item = Item.find_single_item(id.to_i)
+        categories = Category.get_all_categories
+        renderer = ERB.new(File.read('./views/items/edit.erb'))
+        renderer.result(binding)
+    end
+
+    def self.update_item(req)
+        item = Item.new(req)
+        item.update_single_item
+    end
+
+    def self.destroy(id)
+        item = Item.find_single_item(id.to_i)
+        item.delete_single_item
     end
 end

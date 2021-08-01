@@ -6,13 +6,13 @@ class Item
     @@client = create_db_client
 
     def initialize(param)
-        @id         = param.key?(:id) ? param[:id] : nil
+        @id         = param.key?(:id) ? param[:id].to_i : nil
         @name       = param[:name]
-        @price      = param[:price]
-        @categories = []
+        @price      = param[:price].to_i
+        @categories = param.key?(:categories) ? param[:categories] : []
     end
     
-    def save(categories = [])
+    def save
         return false unless valid?
 
         # add new items
@@ -34,13 +34,29 @@ class Item
         true
     end
 
-    def add_category(params)
-        category = Category.new({
-            name: params['category'],
-            item: self
-        })
+    def update_single_item
+        @@client.query("
+            UPDATE items
+            SET 
+                items.name = '#{name}',
+                price = '#{price}'
+            WHERE id = '#{id}'
+        ")
 
-        category.save
+        @@client.query("DELETE FROM item_categories WHERE item_id = #{id}")
+
+        categories.each do |category|
+            @@client.query("
+                INSERT INTO item_categories (item_id, category_id)
+                VALUES ('#{id}', '#{category.to_i}')
+            ")
+        end
+
+        true
+    end
+
+    def delete_single_item
+        @@client.query("DELETE FROM items WHERE id = #{id}")
         true
     end
 
@@ -53,8 +69,8 @@ class Item
     def self.get_all_items_with_categories
         dbRaw = @@client.query("
             select items.*, categories.name as category_name, categories.id as category_id from items
-            join item_categories on item_categories.item_id = items.id
-            join categories on categories.id = item_categories.category_id
+            left join item_categories on item_categories.item_id = items.id
+            left join categories on categories.id = item_categories.category_id
         ")
     
         items = Array.new
@@ -104,6 +120,12 @@ class Item
 
     def self.find_single_item(id)
         item = self.get_all_items_with_categories.find{|x| x.id == id}
+
+        if item.nil?
+            raise 'Item not found'
+        end
+
+        item
     end
 
     def self.update_single_item(id, name, price, category_id)

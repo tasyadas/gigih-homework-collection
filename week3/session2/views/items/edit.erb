@@ -4,7 +4,7 @@
     <form method="POST" action="/items/update/<%= item.id %>">
         <input name="name" type="text" value="<%= item.name %>"/>
         <input name="price" type="text" value="<%= item.price %>"/>
-        <select name="category" id="category" data-category="<%= item.category.id %>">
+        <select name="categories[]" id="category" data-categories="<%= item.categories.map{|x|x.id} %>" multiple>
         <% categories.each do |category|%>
             <option value="<%= category.id %>"><%= category.name %></option>
         <% end %>
@@ -14,6 +14,12 @@
 <body>
 
 <script>
-    var category = document.getElementById("category");
-    category.value = category.dataset.category;
+    const category = document.getElementById("category");
+    const optionsToSelect = category.dataset.categories;
+
+    for ( var i = 0, l = category.options.length, o; i < l; i++ ){
+        if (optionsToSelect.includes(category.options[i].value)) {
+            category.options[i].selected = true
+        }
+    }
 </script>

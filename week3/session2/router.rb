@@ -19,22 +19,16 @@ get '/items/:id' do |id|
 end
 
 
-# get '/items/edit/:id' do |id|
-#     erb :edit, locals:{
-#         item: find_single_item(id.to_i),
-#         categories: get_all_categories
-#     }
-# end
+get '/items/edit/:id' do |id|
+    ItemController.edit_item(id)
+end
 
-# post '/items/update/:id' do |id|
-#     name = params['name']
-#     price = params['price']
-#     category_id = params['category']
-#     update_single_item(id.to_i, name, price.to_i, category_id.to_i)
-#     redirect('/')
-# end
+post '/items/update/:id' do
+    ItemController.update_item(params)
+    redirect('/')
+end
 
-# delete '/items/delete/:id' do |id|
-#     delete_single_item(id.to_i)
-#     redirect('/')
-# end
+delete '/items/delete/:id' do |id|
+    ItemController.destroy(id)
+    redirect('/')
+end
