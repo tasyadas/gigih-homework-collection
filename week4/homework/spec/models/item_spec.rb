@@ -83,7 +83,7 @@ describe Item do
         context 'when given valid parameter' do
 
             before(:each) do
-                @update_item = Item.find_single_item(48)
+                @update_item = Item.find_single_item(1)
                 @update_item.name = 'Capcay'
                 @update_item.categories = ['1', '3']
             end
@@ -143,7 +143,6 @@ describe Item do
             end
         end
     end
-
 end
 
 
