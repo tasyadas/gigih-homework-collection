@@ -122,6 +122,28 @@ describe Item do
             end
         end
     end
+
+    describe '#delete_single_item' do
+        context 'when given valid parameter' do
+            it 'should delete one item from db' do
+                @delete_item = Item.find_single_item(48)
+
+                expect(@delete_item.delete_single_item).to eq(true)
+            end
+        end
+
+        context 'when given invalid parameter' do
+            it 'should return false' do
+                @delete_item = Item.new({
+                    :name       => 'Pasta',
+                    :price      => 54000
+                })
+
+                expect(@delete_item.delete_single_item).to be_falsey
+            end
+        end
+    end
+
 end
 
 
