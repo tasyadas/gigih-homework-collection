@@ -56,6 +56,7 @@ describe Item do
                 mock_client = double
                 allow(Mysql2::Client).to receive(:new).and_return(mock_client)
                 expect(mock_client).to receive(:query).with("insert into items(name, price) values('#{@item.name}', '#{@item.price}')")
+
                 @item.save
             end
         end
