@@ -42,7 +42,7 @@ describe Item do
                 params = {
                     :name       => 'Pasta',
                     :price      => 54000,
-                    :categories => []
+                    :categories => [1, 2]
                 }
 
                 @item = Item.new(params)
@@ -52,12 +52,29 @@ describe Item do
                 expect(@item.valid?).to eq(true)
             end
 
-            it 'should save to db' do
+            it 'should add new item to table items' do
+                categories = @item.categories
                 mock_client = double
+
                 allow(Mysql2::Client).to receive(:new).and_return(mock_client)
+
+                # add new item
                 expect(mock_client).to receive(:query).with("insert into items(name, price) values('#{@item.name}', '#{@item.price}')")
 
-                @item.save
+                # create relationship to category
+                categories.each do |category|
+                    expect(mock_client).to receive(:query).with("
+                    INSERT INTO item_categories(item_id, category_id)
+                    VALUES(
+                        (select id AS item_id from items order by id desc limit 1),
+                        ('#{category.to_i}')
+                    )
+                ")
+                end
+
+                result = @item.save
+
+                expect(result).to eq(true)
             end
         end
     end
